@@ -1,0 +1,39 @@
+name: Auto Nifty Option Bot
+
+on:
+  schedule:
+    # Runs at 3:40 AM UTC = 9:10 AM IST (Monday to Friday)
+    - cron: '40 3 * * 1-5'
+  workflow_dispatch: # Allows manual testing anytime!
+
+permissions:
+  contents: write
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 395
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Libraries
+        run: pip install -r requirements.txt
+
+      - name: Run Auto Trading Bot
+        run: python bot.py
+
+      - name: Save Today's Trades to Permanent Database
+        if: always()
+        run: |
+          git config --global user.name "AutoTradeBot"
+          git config --global user.email "bot@github.com"
+          touch trades_history.csv open_position.json
+          git add trades_history.csv open_position.json
+          git diff --staged --quiet || git commit -m "Auto-save daily paper trades"
+          git push
