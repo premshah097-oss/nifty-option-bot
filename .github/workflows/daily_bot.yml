@@ -4,7 +4,7 @@ on:
   schedule:
     # Runs at 3:40 AM UTC = 9:10 AM IST (Monday to Friday)
     - cron: '40 3 * * 1-5'
-  workflow_dispatch: # Allows manual testing anytime!
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -26,6 +26,13 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run Auto Trading Bot
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          MPIN: ${{ secrets.MPIN }}
+          TOTP_SECRET: ${{ secrets.TOTP_SECRET }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python bot.py
 
       - name: Save Today's Trades to Permanent Database
