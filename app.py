@@ -7,12 +7,12 @@ import streamlit as st
 from SmartApi import SmartConnect
 
 # ==========================================
-# 🔐 APNI ANGEL ONE DETAILS YAHAN BHARO
+# 🔐 SECURE KEYS (Loaded from Streamlit Secrets Vault)
 # ==========================================
-API_KEY = "YOUR_API_KEY_HERE"
-CLIENT_ID = "YOUR_CLIENT_ID_HERE"
-MPIN = "YOUR_4_DIGIT_MPIN"
-TOTP_SECRET = "YOUR_TOTP_STRING_HERE"
+API_KEY = st.secrets.get("API_KEY", os.getenv("API_KEY"))
+CLIENT_ID = st.secrets.get("CLIENT_ID", os.getenv("CLIENT_ID"))
+MPIN = st.secrets.get("MPIN", os.getenv("MPIN"))
+TOTP_SECRET = st.secrets.get("TOTP_SECRET", os.getenv("TOTP_SECRET"))
 
 STARTING_CAPITAL = 25000.0
 CSV_FILE = "trades_history.csv"
