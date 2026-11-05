@@ -9,21 +9,18 @@ from datetime import datetime, timedelta, timezone
 from SmartApi import SmartConnect
 
 # ==========================================
-# 🔐 1. APNI ANGEL ONE DETAILS YAHAN BHARO
+# 🔐 1. SECURE KEYS (Loaded Automatically from GitHub Secrets)
 # ==========================================
-API_KEY = "YOUR_API_KEY_HERE"
-CLIENT_ID = "YOUR_CLIENT_ID_HERE"
-MPIN = "YOUR_4_DIGIT_MPIN"
-TOTP_SECRET = "YOUR_TOTP_STRING_HERE"
+API_KEY = os.getenv("API_KEY")
+CLIENT_ID = os.getenv("CLIENT_ID")
+MPIN = os.getenv("MPIN")
+TOTP_SECRET = os.getenv("TOTP_SECRET")
+
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 # ==========================================
-# 📲 2. APNI TELEGRAM DETAILS YAHAN BHARO
-# ==========================================
-TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN_HERE"
-TELEGRAM_CHAT_ID = "YOUR_TELEGRAM_CHAT_ID_HERE"
-
-# ==========================================
-# ⚙️ 3. STRATEGY & WALLET SETTINGS
+# ⚙️ 2. STRATEGY & WALLET SETTINGS
 # ==========================================
 STARTING_CAPITAL = 25000.0
 LOT_SIZE = 65
@@ -80,6 +77,8 @@ def save_carried_trade(active_trade):
 
 def send_telegram(message):
     print(message)
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+        return
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     try:
         requests.post(url, json={"chat_id": TELEGRAM_CHAT_ID, "text": message, "parse_mode": "HTML"}, timeout=5)
